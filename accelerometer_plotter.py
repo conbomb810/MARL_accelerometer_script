@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import os
 
 #Read the data of a file and format the time, x and z columns into numpy arrays
@@ -26,12 +27,25 @@ def readData(filename):
 #Plot the X and Z axis data onto a scatter plot and save the plot as a png
 def plotData(x, z, trial_name):
     plt.figure(figsize=(8, 6))
+
+    #colormap of red->purple->blue
+    colors = [(1, 0, 0), (0.5, 0, 0.5), (0, 0, 1)]
+    cmap = LinearSegmentedColormap.from_list("RedPurpleBlue", colors, N=len(x))
+    
+    #color values
+    colorlist = [cmap(i / (len(x) - 1)) for i in range(len(x) - 1)]
+
+    #ploting segments with color values
+    for i in range(len(x) - 1):
+        plt.plot(x[i:i+2], z[i:i+2], color=colorlist[i], alpha=1)
+
     #plt.scatter(x, z, c='blue', alpha=0.7, edgecolors='k', label="Data Points")
-    plt.plot(x, z, c='red', alpha=1, label="Line Connection")
+    #plt.plot(x, z, c="red", alpha=1, label="Line Connection")
     plt.title(f"{trial_name}")
     plt.xlabel("X-axis")
     plt.ylabel("Z-axis")
-    #plt.legend()
+    plt.xlim(-9.321824073791504, 7.024587631225586)
+    plt.ylim(-13.535619735717773, 9.587580680847168)
     plt.grid(True)
     plt.savefig(trial_name + ".png")
     plt.close()
@@ -41,7 +55,7 @@ def plotData(x, z, trial_name):
 
 def main():
     #Change the following line to change the directory this script is worked in
-    directory = "C://Users//conbo//Documents//GitHub//MARL_accelerometer_script"
+    directory = "E://MARL Project Repo//MARL_accelerometer_script"
 
     os.chdir(directory)
     for file in os.listdir():
