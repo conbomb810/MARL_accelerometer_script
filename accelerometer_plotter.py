@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
+from sklearn.preprocessing import StandardScaler
 import os
 
 #Read the data of a file and format the time, x and z columns into numpy arrays
@@ -28,6 +30,13 @@ def readData(filename):
 def plotData(x, z, trial_name):
     plt.figure(figsize=(8, 6))
 
+    #standardizations
+    #df = pd.DataFrame({x,z})
+    #df = pd.DataFrame()
+    #scaler = StandardScaler()
+    #x = scaler.transform(x)
+    #z = scaler.transform(z)
+
     #colormap of red->purple->blue
     colors = [(1, 0, 0), (0.5, 0, 0.5), (0, 0, 1)]
     cmap = LinearSegmentedColormap.from_list("RedPurpleBlue", colors, N=len(x))
@@ -44,8 +53,10 @@ def plotData(x, z, trial_name):
     plt.title(f"{trial_name}")
     plt.xlabel("X-axis")
     plt.ylabel("Z-axis")
-    plt.xlim(-9.321824073791504, 7.024587631225586)
-    plt.ylim(-13.535619735717773, 9.587580680847168)
+    #plt.xlim(-5, 5)
+    #plt.ylim(-5, 5)
+    plt.xlim(min(x), min(x) + 2*0.5791059634019134)
+    plt.ylim(min(z), min(z) + 2*0.44316919018461937)
     plt.grid(True)
     plt.savefig(trial_name + ".png")
     plt.close()
@@ -55,7 +66,7 @@ def plotData(x, z, trial_name):
 
 def main():
     #Change the following line to change the directory this script is worked in
-    directory = "E://MARL Project Repo//MARL_accelerometer_script"
+    directory = "C://Users//conbo//Documents//GitHub//MARL_accelerometer_script" #"E://MARL Project Repo//MARL_accelerometer_script"
 
     os.chdir(directory)
     for file in os.listdir():
